@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\PropertyRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -16,8 +17,12 @@ class HomController extends AbstractController
     /**
      * @Route("/hom", name="hom")
      */
-    public function home(): Response
+    public function home(PropertyRepository $repository): Response
     {
-        return $this->render('hom/index.html.twig');
+        $properties= $repository->findLatest();
+
+        return $this->render('hom/index.html.twig', [
+            'properties'=> $properties
+        ]);
     }
 }
