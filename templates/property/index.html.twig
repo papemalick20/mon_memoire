@@ -3,5 +3,41 @@
 {% block title %}Hello PropertyController!{% endblock %}
 
 {% block body %}
+<br/>
+<div class="Jumbotron">
+<div class="container">
+  {{form_start(form)}}
+   <div class="form-row align-items-en">
+    <div class="col">
+     {{ form_row(form.maxprice)}}
+    </div>
+    <div class="col">
+     {{form_row(form.minsurface)}}
+    </div>
+    <div class="col">
+    {{ form_row(form.options)}}
+    </div>
+    <div class="col">
+    <div class ="form-group">
+     <button class="btn btn-primary">Rechercher</button>
+     </div>
+    </div>
+   </div>
+  {{form_end(form)}}
+</div>
+</div>
+
+
+<div>
+<div class="container">
+<h1>Voir tous les biens</h1>
+<div class="row">
+{% for property in properties %}
+<div class="col-md-4">
+{% include 'property/_property.html.twig' %}
+</div>
+{% endfor %}
+</div>
+</div>
 
 {% endblock %}

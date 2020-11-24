@@ -3,9 +3,14 @@
 namespace App\Repository;
 
 use App\Entity\Property;
+use App\Entity\PropertySearch;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+//use Doctrine\Migrations\Query\Query;
+//use Doctrine\ORM\Query;
+//use Doctrine\ORM\Query;
 //use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
+use Knp\Component\Pager\PaginatorInterface;
 
 /**
  * @method Property|null find($id, $lockMode = null, $lockVersion = null)
@@ -20,13 +25,35 @@ class PropertyRepository extends ServiceEntityRepository
         parent::__construct($registry, Property::class);
     }
     /**
-     * @return Property[]
+     * @return property[]
      */
-     public function findAllVisible():array
+     public function findAllVisibleQuery(PropertySearch $search)
      {
-         return $this->findVisibleQuery()
-        ->getQuery()
-        ->getResult();
+         $query= $this->findVisibleQuery();
+          if($search->getMaxprice()){
+              $query = $query
+              ->andWhere('p.price <= :maxprice')
+              ->setParameter('maxprice', $search->getMaxprice());
+          }
+
+          $query= $this->findVisibleQuery();
+          if($search->getMinsurface()){
+              $query = $query
+              ->andWhere('p.surface >= :minsurface')
+              ->setParameter('minsurface', $search->getMinsurface());
+          }
+          if($search->getOptions()->count()>0){
+              $k=0;
+              foreach($search->getOptions() as $option){
+                  $k++;
+                  $query = $query
+                  ->andWhere(":options$k MEMBER OF p.options")
+                  ->setParameter("options$k", $option);
+              }
+          }
+         return $query->getQuery()
+                      
+                 ->getResult();
      }
        /**
         * @return Property[]
@@ -39,6 +66,7 @@ class PropertyRepository extends ServiceEntityRepository
                 ->setMaxResults(4)
                 ->getQuery()
                 ->getResult();
+               
         }
      /**
       * @return QueryBuilder

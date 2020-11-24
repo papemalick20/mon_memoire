@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Option index{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1>Option index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for option in options %}
+            <tr>
+                <td>{{ option.id }}</td>
+                <td>{{ option.name }}</td>
+                <td>
+                    <form method="post" action="{{ path('option_delete', {'id': option.id}) }}" 
+                     style="display:inline-block" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                      <input type="hidden" name="_method" value="DELETE">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ option.id) }}">
+                         <button class="btn btn-danger">Delete</button>
+                    </form>
+
+                    <a href="{{ path('option_edit', {'id': option.id}) }}" class="btn btn-warning">Editer</a>
+                </td>
+            </tr>
+        {% else %}
+            {# <tr>
+                <td colspan="3">no records found</td>
+            </tr> #}
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('option_new') }}" class="btn btn-success">Create new option</a>
+    </div>
+{% endblock %}
+
