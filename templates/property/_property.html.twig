@@ -1,7 +1,7 @@
     <div class="card mb-4">
-    {# {% if property.filename %}
+    {% if property.filename %}
     <img src="{{vich_uploader_asset(property, 'imageFile') | imagine_filter('thumb')}}" alt="card-img-top" style="width:100%; height:auto;">
-    {% endif %} #}
+    {% endif %}
     <div class="card-body">
     <h5 class="card-title">
       <a href ="{{path('property.show', {slug: property.slug, id: property.id}) }}" style="font-size:2rem; font-weight:bold">{{property.title}}
